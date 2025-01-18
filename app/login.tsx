@@ -87,7 +87,7 @@ export default function LoginScreen() {
             title="Sign In"
             loading={loading}
             onPress={handleLogin}
-            buttonStyle={styles.button}
+            style={styles.button}
           />
         </ThemedView>
       </ScrollView>

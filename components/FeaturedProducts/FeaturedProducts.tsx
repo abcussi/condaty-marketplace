@@ -34,7 +34,7 @@ export const FeaturedProducts = () => {
       contentContainerStyle={styles.container}>
       {featuredProducts.map((product) => (
         <ThemedView key={product.id} style={styles.cardContainer}>
-          <ProductCard {...product} onPress={() => {}} />
+          <ProductCard product={product} />
         </ThemedView>
       ))}
     </ScrollView>

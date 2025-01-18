@@ -7,7 +7,7 @@ export interface User {
 
 export interface Product {
   id: any;
-  _id: string;  // Cambiado de id a _id para coincidir con MongoDB
+  _id: any;  // Cambiado de id a _id para coincidir con MongoDB
   name: string;
   description: string;
   price: number;
@@ -32,11 +32,15 @@ export interface Product {
   }
   
   export interface Order {
-    id: string;
-    buyer: User;
-    products: OrderItem[];
+    _id: string;
+    user: string | User;
+    items: {
+      product: string | Product;
+      quantity: number;
+      price: number;
+    }[];
     total: number;
-    status: 'pending' | 'confirmed' | 'completed' | 'cancelled';
+    status: 'pending' | 'completed' | 'cancelled';
     createdAt: string;
   }
   

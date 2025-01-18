@@ -6,7 +6,7 @@ import { ThemedText } from '../ThemedText';
 import { Product } from '@/src/types/api';
 
 interface ProductCardProps {
-  product: Product;
+  product: any;
   compact?: boolean;
 }
 

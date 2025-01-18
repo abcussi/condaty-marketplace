@@ -3,55 +3,54 @@ import {
   TouchableOpacity, 
   StyleSheet, 
   ActivityIndicator,
-  TouchableOpacityProps,
+  View,
   StyleProp,
   ViewStyle,
   TextStyle 
 } from 'react-native';
 import { ThemedText } from '../ThemedText';
 
-interface ButtonProps extends TouchableOpacityProps {
+interface ButtonProps {
   title: string;
+  onPress: () => void;
   loading?: boolean;
-  variant?: 'primary' | 'secondary' | 'outline';
-  size?: 'small' | 'medium' | 'large';
-  buttonStyle?: StyleProp<ViewStyle>;
+  disabled?: boolean;
+  variant?: 'primary' | 'secondary' | 'destructive';
+  icon?: React.ReactNode;
+  style?: StyleProp<ViewStyle>;
   textStyle?: StyleProp<TextStyle>;
 }
 
-export const Button = ({ 
-  title, 
-  loading, 
-  variant = 'primary',
-  size = 'medium',
-  buttonStyle, 
-  textStyle,
+export const Button = ({
+  title,
+  onPress,
+  loading,
   disabled,
-  ...props 
+  variant = 'primary',
+  icon,
+  style,
+  textStyle,
 }: ButtonProps) => {
   return (
     <TouchableOpacity
+      onPress={onPress}
+      disabled={disabled || loading}
       style={[
         styles.button,
         styles[variant],
-        styles[size],
         disabled && styles.disabled,
-        buttonStyle,
+        style,
       ]}
-      disabled={disabled || loading}
-      {...props}
     >
       {loading ? (
-        <ActivityIndicator color={variant === 'outline' ? '#007AFF' : '#fff'} />
+        <ActivityIndicator color="#fff" />
       ) : (
-        <ThemedText style={[
-          styles.text,
-          styles[`${variant}Text`],
-          styles[`${size}Text`],
-          textStyle,
-        ]}>
-          {title}
-        </ThemedText>
+        <View style={styles.content}>
+          {icon && <View style={styles.iconContainer}>{icon}</View>}
+          <ThemedText style={[styles.text, textStyle]}>
+            {title}
+          </ThemedText>
+        </View>
       )}
     </TouchableOpacity>
   );
@@ -60,8 +59,18 @@ export const Button = ({
 const styles = StyleSheet.create({
   button: {
     borderRadius: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 16,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  iconContainer: {
+    marginRight: 8,
   },
   primary: {
     backgroundColor: '#007AFF',
@@ -69,45 +78,15 @@ const styles = StyleSheet.create({
   secondary: {
     backgroundColor: '#6c757d',
   },
-  outline: {
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: '#007AFF',
-  },
-  small: {
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-  },
-  medium: {
-    paddingVertical: 12,
-    paddingHorizontal: 16,
-  },
-  large: {
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-  },
-  text: {
-    fontWeight: '600',
-  },
-  primaryText: {
-    color: '#fff',
-  },
-  secondaryText: {
-    color: '#fff',
-  },
-  outlineText: {
-    color: '#007AFF',
-  },
-  smallText: {
-    fontSize: 14,
-  },
-  mediumText: {
-    fontSize: 16,
-  },
-  largeText: {
-    fontSize: 18,
+  destructive: {
+    backgroundColor: '#dc3545',
   },
   disabled: {
     opacity: 0.6,
+  },
+  text: {
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: '600',
   },
 });
