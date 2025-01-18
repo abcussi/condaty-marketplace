@@ -1,71 +1,126 @@
-import { useState } from 'react';
-import { StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { 
+  StyleSheet, 
+  KeyboardAvoidingView, 
+  Platform,
+  ScrollView,
+  Alert 
+} from 'react-native';
 import { router } from 'expo-router';
-import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
+import { ThemedText } from '@/components/ThemedText';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { auth } from '@/src/api/auth';
 
 export default function LoginScreen() {
+  const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
-  const handleLogin = () => {
-    router.replace('/(tabs)');
+  const validate = () => {
+    const newErrors: { email?: string; password?: string } = {};
+
+    if (!email) newErrors.email = 'Email is required';
+    else if (!/\S+@\S+\.\S+/.test(email)) newErrors.email = 'Email is invalid';
+    
+    if (!password) newErrors.password = 'Password is required';
+    else if (password.length < 6) newErrors.password = 'Password must be at least 6 characters';
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleLogin = async () => {
+    if (!validate()) return;
+
+    try {
+      setLoading(true);
+      await auth.login(email, password);
+      router.replace('/(tabs)');
+    } catch (error) {
+      Alert.alert(
+        'Login Error',
+        error instanceof Error ? error.message : 'An error occurred during login'
+      );
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <ThemedView style={styles.container}>
-      <ThemedText style={styles.title}>Condaty Marketplace</ThemedText>
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        value={email}
-        onChangeText={setEmail}
-        autoCapitalize="none"
-        keyboardType="email-address"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-      <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <ThemedText style={styles.buttonText}>Login</ThemedText>
-      </TouchableOpacity>
-    </ThemedView>
+    <KeyboardAvoidingView 
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}
+    >
+      <ScrollView 
+        contentContainerStyle={styles.scrollContent}
+        keyboardShouldPersistTaps="handled"
+      >
+        <ThemedView style={styles.content}>
+          <ThemedText style={styles.title}>Welcome to Condaty</ThemedText>
+          <ThemedText style={styles.subtitle}>Sign in to your account</ThemedText>
+
+          <Input
+            label="Email"
+            value={email}
+            onChangeText={setEmail}
+            placeholder="Enter your email"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            autoComplete="email"
+            error={errors.email}
+          />
+
+          <Input
+            label="Password"
+            value={password}
+            onChangeText={setPassword}
+            placeholder="Enter your password"
+            secureTextEntry
+            autoComplete="password"
+            error={errors.password}
+          />
+
+          <Button
+            title="Sign In"
+            loading={loading}
+            onPress={handleLogin}
+            buttonStyle={styles.button}
+          />
+        </ThemedView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    backgroundColor: '#f5f5f5',
+  },
+  scrollContent: {
+    flexGrow: 1,
+  },
+  content: {
+    flex: 1,
     padding: 20,
+    justifyContent: 'center',
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: 'bold',
-    marginBottom: 30,
     textAlign: 'center',
+    marginBottom: 8,
   },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    padding: 15,
-    borderRadius: 8,
-    marginBottom: 15,
-    backgroundColor: '#fff',
+  subtitle: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+    marginBottom: 32,
   },
   button: {
-    backgroundColor: '#007AFF',
-    padding: 15,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+    marginTop: 16,
   },
 });
