@@ -4,18 +4,14 @@ import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
 
-export default function HomeScreen() {
+export default function ProductsScreen() {
   return (
     <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={<></>}>
+          headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }} headerImage={<></>}>
       <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome to Condaty Marketplace</ThemedText>
+        <ThemedText type="title">Marketplace</ThemedText>
       </ThemedView>
-      <ThemedView style={styles.container}>
-        <ThemedText type="subtitle">Featured Products</ThemedText>
-        {/* <FeaturedProducts /> */}
-      </ThemedView>
+      {/* <ProductList /> */}
     </ParallaxScrollView>
   );
 }
@@ -25,9 +21,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
-  },
-  container: {
-    gap: 16,
-    marginTop: 24,
+    marginBottom: 16,
   },
 });
