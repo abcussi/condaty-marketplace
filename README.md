@@ -1,50 +1,162 @@
-# Welcome to your Expo app 👋
+# Condaty Marketplace Mobile App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Aplicación móvil del marketplace para la plataforma de administración de condominios Condaty.
 
-## Get started
+## Estructura del Proyecto
 
-1. Install dependencies
-
-   ```bash
-   npm install
-   ```
-
-2. Start the app
-
-   ```bash
-    npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+condaty-marketplace/
+├── app/                # Rutas y navegación con Expo Router
+│   ├── (tabs)/        # Pestañas principales
+│   │   ├── _layout.tsx     # Layout principal y navegación
+│   │   ├── index.tsx       # Home/Productos destacados
+│   │   ├── products.tsx    # Lista de productos
+│   │   ├── cart.tsx       # Carrito de compras
+│   │   ├── order.tsx      # Historial de órdenes
+│   │   └── profile.tsx    # Perfil de usuario
+│   ├── product/      # Rutas de producto
+│   │   └── [id].tsx  # Detalles de producto
+│   ├── login.tsx     # Pantalla de login
+│   └── _layout.tsx   # Layout principal
+├── src/
+│   ├── api/          # Configuración y llamadas a la API
+│   ├── components/   # Componentes reutilizables
+│   ├── store/       # Estado global (Zustand)
+│   └── types/       # Tipos TypeScript
+└── assets/          # Recursos estáticos
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Configuración e Instalación
 
-## Learn more
+### Requisitos Previos
+- Node.js 18+
+- npm o yarn
+- Expo CLI
+- Docker y Docker Compose (para el backend)
 
-To learn more about developing your project with Expo, look at the following resources:
+### Iniciar el Backend
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+1. Navega al directorio del backend:
+```bash
+cd api
+```
 
-## Join the community
+2. Inicia los servicios con Docker:
+```bash
+# Construir e iniciar
+docker-compose up --build
 
-Join our community of developers creating universal apps.
+# O en segundo plano
+docker-compose up -d
+```
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+El backend estará disponible en `http://localhost:5000`
+
+### Iniciar la Aplicación Móvil
+
+1. Instala las dependencias:
+```bash
+npm install
+```
+
+2. Inicia la aplicación:
+```bash
+npx expo start
+```
+
+3. Escanea el código QR con la app Expo Go o ejecuta en un emulador
+
+## Características Implementadas
+
+### 1. Autenticación
+- Login/Logout con JWT
+- Manejo de sesión
+- Protección de rutas
+- Persistencia del token
+
+### 2. Productos
+- Listado con búsqueda
+- Filtrado por categorías
+- Detalles de producto
+- Loading states
+
+### 3. Carrito de Compras
+- Agregar/eliminar productos
+- Modificar cantidades
+- Persistencia con Zustand
+- Proceso de checkout
+
+### 4. Órdenes
+- Crear órdenes
+- Ver historial
+- Estados de orden
+
+### 5. Perfil
+- Información del usuario
+- Datos del condominio
+- Logout
+
+## Arquitectura y Decisiones Técnicas
+
+### Tecnologías Principales
+- **Expo**: Framework para desarrollo móvil
+- **Expo Router**: Sistema de navegación basado en archivos
+- **TypeScript**: Para tipado estático
+- **Zustand**: Manejo de estado global
+- **AsyncStorage**: Persistencia local
+
+### Estructura de Datos
+- Persistencia del carrito con Zustand + AsyncStorage
+- Estado global para autenticación
+- Tipos TypeScript compartidos con el backend
+
+### Patrones Implementados
+- Componentes reutilizables
+- Custom hooks para lógica común
+- Servicios API centralizados
+- Manejo de errores consistente
+
+## Mejoras Futuras
+
+### 1. Rendimiento
+- [ ] Implementar react-query para cache y manejo de datos
+- [ ] Optimizar renderizado de listas grandes
+- [ ] Mejorar manejo de imágenes
+- [ ] Implementar skeleton loading
+
+### 2. Funcionalidades
+- [ ] Sistema de reseñas para productos
+- [ ] Chat entre compradores y vendedores
+- [ ] Notificaciones push
+- [ ] Favoritos y lista de deseos
+- [ ] Filtros avanzados de búsqueda
+
+### 3. UX/UI
+- [ ] Tema oscuro
+- [ ] Animaciones y transiciones
+- [ ] Mejor feedback visual
+- [ ] Mejoras en accesibilidad
+
+### 4. Técnicas
+- [ ] Tests unitarios y de integración
+- [ ] Manejo offline
+- [ ] Mejora en manejo de errores
+- [ ] Sistema de logs
+
+## Credenciales de Prueba
+
+```
+Email: test@example.com
+Password: password123
+```
+
+## Notas Adicionales
+
+- La app requiere que el backend esté corriendo para funcionar
+- Las imágenes de productos usan placeholders por defecto
+- El backend incluye datos de prueba al iniciar
+
+## Contacto
+
+Para información o soporte:
+- cussi.angel.benjamin@gmail.com
