@@ -1,29 +1,29 @@
 export interface User {
-    id: string;
-    email: string;
-    name: string;
-    condominium: string;
-  }
-  
+  _id: string;  // Cambiado de id a _id para coincidir con MongoDB
+  email: string;
+  name: string;
+  condominium: string;
+}
+
+export interface Product {
+  id: any;
+  _id: string;  // Cambiado de id a _id para coincidir con MongoDB
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  images: string[];
+  seller: string | User; // Puede ser el ID o el objeto User populado
+  condominium: string;
+  status?: 'available' | 'sold' | 'reserved';
+  createdAt?: string;
+}  
   export interface AuthResponse {
     user: User;
     token: string;
   }
   
   // Product types
-  export interface Product {
-    id: string;
-    name: string;
-    description: string;
-    price: number;
-    category: string;
-    images: string[];
-    seller: User;
-    condominium: string;
-    status: 'available' | 'sold' | 'reserved';
-    createdAt: string;
-  }
-  
   // Order types
   export interface OrderItem {
     product: Product;

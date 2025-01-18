@@ -1,11 +1,9 @@
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View, Image, Dimensions } from 'react-native';
+import { StyleSheet, TouchableOpacity, Image, View } from 'react-native';
 import { router } from 'expo-router';
-import { Product } from '@/src/types/api';
 import { ThemedView } from '../ThemedView';
 import { ThemedText } from '../ThemedText';
-
-const { width } = Dimensions.get('window');
+import { Product } from '@/src/types/api';
 
 interface ProductCardProps {
   product: Product;
@@ -14,16 +12,18 @@ interface ProductCardProps {
 
 export const ProductCard = ({ product, compact }: ProductCardProps) => {
   const handlePress = () => {
-    router.push(`/product/${product.id}`);
+    router.push({
+      pathname: "/product/[id]",
+      params: { id: product._id }
+    });
   };
 
   return (
     <TouchableOpacity onPress={handlePress}>
       <ThemedView style={[styles.card, compact && styles.compactCard]}>
         <Image
-          source={{ uri: product.images[0] }}
+          source={{ uri: product.images[0] || 'https://via.placeholder.com/300' }}
           style={[styles.image, compact && styles.compactImage]}
-          defaultSource={require('@/assets/images/placeholder.png')}
         />
         <ThemedView style={styles.content}>
           <ThemedText numberOfLines={1} style={styles.name}>
@@ -38,7 +38,7 @@ export const ProductCard = ({ product, compact }: ProductCardProps) => {
                 {product.description}
               </ThemedText>
               <ThemedText style={styles.condominium}>
-                {product.condominium}
+                From: {product.condominium}
               </ThemedText>
             </>
           )}
@@ -61,8 +61,8 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   compactCard: {
-    width: width * 0.4,
-    marginHorizontal: 8,
+    width: '48%', // Para mostrar dos columnas
+    marginHorizontal: '1%',
   },
   image: {
     width: '100%',

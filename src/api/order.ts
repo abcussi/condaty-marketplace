@@ -1,23 +1,16 @@
 import api from './config';
-import { Order } from '../types/api';
+import { Order } from './indes';
 
 interface CreateOrderData {
-  products: {
-    productId: string;
+  items: {
+    product: string;
     quantity: number;
+    price: number;
   }[];
+  total: number;
 }
 
 export const orders = {
-  getAll: async (): Promise<Order[]> => {
-    try {
-      const response = await api.get<Order[]>('/orders');
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  },
-
   create: async (orderData: CreateOrderData): Promise<Order> => {
     try {
       const response = await api.post<Order>('/orders', orderData);
@@ -27,12 +20,12 @@ export const orders = {
     }
   },
 
-  getById: async (id: string): Promise<Order> => {
+  getAll: async (): Promise<Order[]> => {
     try {
-      const response = await api.get<Order>(`/orders/${id}`);
+      const response = await api.get<Order[]>('/orders');
       return response.data;
     } catch (error) {
       throw error;
     }
-  }
+  },
 };
